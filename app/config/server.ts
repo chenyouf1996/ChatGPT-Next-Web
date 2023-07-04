@@ -17,11 +17,6 @@ declare global {
   }
 }
 
-// const apiKeyList = [
-//   "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",
-//   "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",
-// ];
-
 const ACCESS_CODES = (function getAccessCodes(): Set<string> {
   const code = process.env.CODE;
 
