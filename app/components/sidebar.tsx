@@ -129,6 +129,15 @@ export function SideBar(props: { className?: string }) {
 
       <div className={styles["sidebar-header-bar"]}>
         <IconButton
+          text={shouldNarrow ? undefined : Locale.User.Name}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => navigate(Path.User, { state: { fromHome: true } })}
+          shadow
+        />
+      </div>
+
+      <div className={styles["sidebar-header-bar"]}>
+        <IconButton
           icon={<MaskIcon />}
           text={shouldNarrow ? undefined : Locale.Mask.Name}
           className={styles["sidebar-bar-button"]}

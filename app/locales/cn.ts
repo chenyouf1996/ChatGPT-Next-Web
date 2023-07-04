@@ -254,6 +254,15 @@ const cn = {
     Clear: "上下文已清除",
     Revert: "恢复上下文",
   },
+  User: {
+    Name: "登录/注册",
+    LoginTitle: '一键注册登录',
+    LoginSubTitle: '未注册将自动注册',
+    ConfirmBtn: '登录',
+    UserName: '用户名',
+    Password: '密码',
+    email: '邮箱'
+  },
   Plugin: {
     Name: "插件",
   },
