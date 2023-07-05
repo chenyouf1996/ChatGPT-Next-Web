@@ -30,10 +30,6 @@ const ACCESS_CODES = (function getAccessCodes(): Set<string> {
   }
 })();
 
-const getRandomValueFromArray = (list: Array<string>) => {
-  return list[Math.floor(Math.random() * list.length)];
-};
-
 export const getServerSideConfig = () => {
   if (typeof process === "undefined") {
     throw Error(

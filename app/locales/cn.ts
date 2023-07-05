@@ -256,9 +256,11 @@ const cn = {
   },
   User: {
     Name: "登录/注册",
-    LoginTitle: '一键注册登录',
-    LoginSubTitle: '未注册将自动注册',
-    ConfirmBtn: '登录',
+    LoginTitle: '登录账号',
+    RegisterTitle: '注册账号',
+    LoginSubTitle: '加入qq群xxx获取最新体验账号',
+    LoginBtn: '登录',
+    RegisterBtn: '注册',
     UserName: '用户名',
     Password: '密码',
     email: '邮箱'

@@ -14,6 +14,7 @@ import PluginIcon from "../icons/plugin.svg";
 import Locale from "../locales";
 
 import { useAppConfig, useChatStore } from "../store";
+import useAuth from "../hooks/useAuth";
 
 import {
   MAX_SIDEBAR_WIDTH,
@@ -106,6 +107,7 @@ export function SideBar(props: { className?: string }) {
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
   const config = useAppConfig();
+  const { user } = useAuth();
 
   useHotKey();
 
@@ -128,12 +130,14 @@ export function SideBar(props: { className?: string }) {
       </div>
 
       <div className={styles["sidebar-header-bar"]}>
-        <IconButton
-          text={shouldNarrow ? undefined : Locale.User.Name}
-          className={styles["sidebar-bar-button"]}
-          onClick={() => navigate(Path.User, { state: { fromHome: true } })}
-          shadow
-        />
+        {user || (
+          <IconButton
+            text={shouldNarrow ? undefined : Locale.User.Name}
+            className={styles["sidebar-bar-button"]}
+            onClick={() => navigate(Path.User, { state: { fromHome: true } })}
+            shadow
+          />
+        )}
       </div>
 
       <div className={styles["sidebar-header-bar"]}>

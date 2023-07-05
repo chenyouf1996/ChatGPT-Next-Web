@@ -1,20 +1,15 @@
-import mongoose from "mongoose";
-import User from "../../../app/models/User";
+import Users from "../../../app/models/Users";
+import dbConnect from "../../../app/db";
 
 export default async function handler(req: any, res: any) {
-  const db = await mongoose.connect("mongodb://127.0.0.1:27017/mydatabase", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  // if (req.method === "GET") {
-  //   const users = await User.find();
-  //   res.status(200).json(users);
-  // }
+  await dbConnect();
+
   if (req.method === "POST") {
     const { userName, password, email } = req.body;
-    const user = new User({ userName, password, email });
-    await user.save();
-    res.status(201).json(user);
+    const users = new Users({ userName, password, email, integral: 0 });
+    await users.save();
+    res
+      .status(201)
+      .json({ result: "success", message: "创建用户成功", data: { userName } });
   }
-  db.disconnect();
 }
