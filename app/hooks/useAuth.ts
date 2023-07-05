@@ -1,41 +1,44 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Cookies from "js-cookie";
+import useUserStore from "../store/user";
 
 const useAuth = () => {
-  const [user, setUser] = useState("");
+  const { user, setUser } = <any>useUserStore();
 
   useEffect(() => {
-    const userCookie = Cookies.get("user");
+    const userToken = Cookies.get("token");
 
-    if (userCookie) {
+    if (userToken) {
       // 如果有用户 cookie，表示用户已登录
-      setUser(userCookie);
+      login("", "", userToken);
     }
   }, []);
 
-  const login = async (userName: string, password: string) => {
+  const login = async (userName: string, password: string, token: string) => {
     const res = await fetch("/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userName, password }),
+      body: JSON.stringify({ userName, password, token }),
     });
     if (res.status === 200) {
       const data = await res.json();
-      const token = data.data;
+      const { token: _token, userName: _userName, integral } = data.data;
       // 将用户信息保存到 cookie 中
-      Cookies.set("token", token, { expires: 7 });
-      Cookies.set("user", userName, { expires: 7 });
-      setUser(userName);
+      if (_token) {
+        Cookies.set("token", _token, { expires: 7 });
+      }
+      setUser({ userName: _userName, integral });
+    } else {
+      throw "登录失败";
     }
   };
 
   const logout = () => {
     // 从 cookie 中移除用户信息
     Cookies.remove("token");
-    Cookies.remove("user");
-    setUser("");
+    setUser(null);
   };
 
   return { user, login, logout };

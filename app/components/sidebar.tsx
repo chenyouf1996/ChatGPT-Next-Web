@@ -107,7 +107,7 @@ export function SideBar(props: { className?: string }) {
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
   const config = useAppConfig();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   useHotKey();
 
@@ -130,7 +130,19 @@ export function SideBar(props: { className?: string }) {
       </div>
 
       <div className={styles["sidebar-header-bar"]}>
-        {user || (
+        {user ? (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <span>{user.userName}</span>
+            <IconButton text="退出" onClick={logout} />
+          </div>
+        ) : (
           <IconButton
             text={shouldNarrow ? undefined : Locale.User.Name}
             className={styles["sidebar-bar-button"]}

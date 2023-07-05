@@ -9,6 +9,7 @@ import Locale from "../locales";
 import BotIcon from "../icons/bot.svg";
 import useUser from "../hooks/useUser";
 import useAuth from "../hooks/useAuth";
+import { showToast } from "./ui-lib";
 
 const User = () => {
   const [userName, setUserName] = useState("");
@@ -17,19 +18,27 @@ const User = () => {
   const [loginPage, setLoginPage] = useState(true);
   const navigate = useNavigate();
   const { addUser } = useUser();
-  const { user, login, logout } = useAuth();
+  const { user, login } = useAuth();
 
   const goHome = () => navigate(Path.Home);
 
   const handleLogin = async () => {
-    await login(userName, password);
-    goHome();
+    try {
+      await login(userName, password);
+      goHome();
+    } catch (error) {
+      showToast("登录失败,密码不正确");
+    }
   };
 
   const handleRegister = async () => {
-    await addUser(userName, password, email);
-    await login(userName, password);
-    goHome();
+    try {
+      await addUser(userName, password, email);
+      await login(userName, password);
+      goHome();
+    } catch (error) {
+      showToast("注册登录失败");
+    }
   };
 
   return (

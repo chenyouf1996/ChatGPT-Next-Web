@@ -9,7 +9,7 @@ export default async function handler(req: any, res: any) {
     const users = new Users({ userName, password, email, integral: 0 });
     await users.save();
     res
-      .status(201)
+      .status(200)
       .json({ result: "success", message: "创建用户成功", data: { userName } });
   }
 }
