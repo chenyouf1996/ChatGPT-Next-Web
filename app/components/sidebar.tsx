@@ -1,4 +1,6 @@
 import { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import dynamic from "next/dynamic";
 
 import styles from "./home.module.scss";
 
@@ -24,9 +26,7 @@ import {
   // REPO_URL,
 } from "../constant";
 
-import { Link, useNavigate } from "react-router-dom";
 import { useMobileScreen } from "../utils";
-import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
@@ -111,6 +111,13 @@ export function SideBar(props: { className?: string }) {
 
   useHotKey();
 
+  const goUser = () => navigate(Path.User);
+
+  const handleLogout = async () => {
+    await logout();
+    goUser();
+  };
+
   return (
     <div
       className={`${styles.sidebar} ${props.className} ${
@@ -121,9 +128,7 @@ export function SideBar(props: { className?: string }) {
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
           ChatGPT
         </div>
-        <div className={styles["sidebar-sub-title"]}>
-          Build your own AI assistant.
-        </div>
+        <div className={styles["sidebar-sub-title"]}>定制你的私人ai助手</div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
@@ -139,8 +144,10 @@ export function SideBar(props: { className?: string }) {
               alignItems: "center",
             }}
           >
-            <span>{user.userName}</span>
-            <IconButton text="退出" onClick={logout} />
+            <span>
+              {user.userName} 积分:{user.integral}
+            </span>
+            <IconButton text="退出" onClick={handleLogout} />
           </div>
         ) : (
           <IconButton

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import useUserStore from "../store/user";
+import { showConfirm, showToast } from "../components/ui-lib";
 
 const useAuth = () => {
   const { user, setUser } = <any>useUserStore();
@@ -14,7 +15,7 @@ const useAuth = () => {
     }
   }, []);
 
-  const login = async (userName: string, password: string, token: string) => {
+  const login = async (userName: string, password: string, token?: string) => {
     const res = await fetch("/api/user/login", {
       method: "POST",
       headers: {
@@ -35,7 +36,8 @@ const useAuth = () => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await showConfirm("确认退出当前账号？");
     // 从 cookie 中移除用户信息
     Cookies.remove("token");
     setUser(null);
