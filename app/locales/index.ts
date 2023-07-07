@@ -67,7 +67,7 @@ const targetLang = ALL_LANGS[getLang()] as LocaleType;
 // if target lang missing some fields, it will use fallback lang string
 merge(fallbackLang, targetLang);
 
-export default fallbackLang as LocaleType;
+export default fallbackLang as unknown as LocaleType;
 
 function getItem(key: string) {
   try {

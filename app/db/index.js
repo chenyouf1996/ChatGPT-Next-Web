@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/chatgpt";
+const MONGODB_URI = process.env.MONGODB_URI;
+// const MONGODB_URI = "mongodb://127.0.0.1:27017/chatgpt";
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -14,10 +14,10 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = global.mongoose;
+let cached = globalThis.mongoose;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+  cached = globalThis.mongoose = { conn: null, promise: null };
 }
 
 const dbConnect = async () => {

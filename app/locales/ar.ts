@@ -14,6 +14,17 @@ const ar: PartialLocaleType = {
     Confirm: "تأكيد",
     Later: "لاحقًا",
   },
+  User: {
+    Name: "登录/注册",
+    LoginTitle: '登录账号',
+    RegisterTitle: '注册账号',
+    LoginSubTitle: '加入qq群xxx获取最新体验账号',
+    LoginBtn: '登录',
+    RegisterBtn: '注册',
+    UserName: '用户名',
+    Password: '密码',
+    email: '邮箱'
+  },
   ChatItem: {
     ChatItemCount: (count: number) => `${count} رسائل`,
   },

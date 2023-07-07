@@ -1,7 +1,6 @@
 import { SubmitKey } from "../store/config";
-import { LocaleType } from "./index";
 
-const en: LocaleType = {
+const en = {
   WIP: "Coming Soon...",
   Error: {
     Unauthorized:
@@ -159,6 +158,17 @@ const en: LocaleType = {
     Mask: {
       Title: "Mask Splash Screen",
       SubTitle: "Show a mask splash screen before starting new chat",
+    },
+    User: {
+      Name: "登录/注册",
+      LoginTitle: '登录账号',
+      RegisterTitle: '注册账号',
+      LoginSubTitle: '加入qq群xxx获取最新体验账号',
+      LoginBtn: '登录',
+      RegisterBtn: '注册',
+      UserName: '用户名',
+      Password: '密码',
+      email: '邮箱'
     },
     Prompt: {
       Disable: {

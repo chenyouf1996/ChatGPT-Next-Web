@@ -1,6 +1,5 @@
 import CryptoJs from "crypto-js";
 import Users from "@/app/models/Users";
-import { base64Encode } from "@/app/utils/tools";
 import dbConnect from "../../../app/db";
 
 // 密钥，用于加密和解密Token
