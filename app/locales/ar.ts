@@ -18,7 +18,7 @@ const ar: PartialLocaleType = {
     Name: "登录/注册",
     LoginTitle: '登录账号',
     RegisterTitle: '注册账号',
-    LoginSubTitle: '加入qq群xxx获取最新体验账号',
+    LoginSubTitle: '加入qq群xxx获取每日最新体验账号',
     LoginBtn: '登录',
     RegisterBtn: '注册',
     UserName: '用户名',

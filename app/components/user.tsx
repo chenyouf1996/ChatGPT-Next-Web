@@ -10,6 +10,7 @@ import BotIcon from "../icons/bot.svg";
 import useUser from "../hooks/useUser";
 import useAuth from "../hooks/useAuth";
 import { showToast } from "./ui-lib";
+import useVerifyForm from "../hooks/useVerifyForm";
 
 const User = () => {
   const [userName, setUserName] = useState("");
@@ -18,7 +19,9 @@ const User = () => {
   const [loginPage, setLoginPage] = useState(true);
   const navigate = useNavigate();
   const { addUser } = useUser();
-  const { user, login } = useAuth();
+  const { login } = useAuth();
+  const { user } = useUser();
+  const { verifyUserName, verifyPassword, verifyEmail } = useVerifyForm();
 
   const goHome = () => navigate(Path.Home);
 
@@ -26,18 +29,27 @@ const User = () => {
     try {
       await login(userName, password);
       goHome();
-    } catch (error) {
-      showToast("登录失败,密码不正确");
+    } catch (error: any) {
+      showToast(error);
     }
   };
 
   const handleRegister = async () => {
+    if (!verifyUserName(userName)) {
+      return showToast("用户名校验失败：最少6个字符，不能超过18个字符");
+    } else if (!verifyPassword(password)) {
+      return showToast(
+        "密码校验失败：最少6个字符，包含字母和数字，最大18个字符",
+      );
+    } else if (!verifyEmail(email)) {
+      return showToast("邮箱校验失败");
+    }
     try {
       await addUser(userName, password, email);
       await login(userName, password);
       goHome();
-    } catch (error) {
-      showToast("注册登录失败");
+    } catch (error: any) {
+      showToast(error);
     }
   };
 

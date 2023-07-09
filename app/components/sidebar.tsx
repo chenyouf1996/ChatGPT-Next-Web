@@ -28,6 +28,7 @@ import {
 
 import { useMobileScreen } from "../utils";
 import { showConfirm, showToast } from "./ui-lib";
+import useUser from "../hooks/useUser";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -107,7 +108,8 @@ export function SideBar(props: { className?: string }) {
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
   const config = useAppConfig();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { user } = useUser();
 
   useHotKey();
 
@@ -144,14 +146,16 @@ export function SideBar(props: { className?: string }) {
               alignItems: "center",
             }}
           >
-            <span>
-              {user.userName} 积分:{user.integral}
-            </span>
+            {!shouldNarrow && (
+              <span>
+                {user.userName} 积分:{user.integral}
+              </span>
+            )}
             <IconButton text="退出" onClick={handleLogout} />
           </div>
         ) : (
           <IconButton
-            text={shouldNarrow ? undefined : Locale.User.Name}
+            text={Locale.User.Name}
             className={styles["sidebar-bar-button"]}
             onClick={() => navigate(Path.User, { state: { fromHome: true } })}
             shadow

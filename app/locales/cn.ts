@@ -4,7 +4,7 @@ const cn = {
   WIP: "该功能仍在开发中……",
   Error: {
     Unauthorized:
-      "访问密码不正确或为空，请前往[登录](/#/auth)页输入正确的访问密码，或者在[设置](/#/settings)页填入你自己的 OpenAI API Key。",
+      "请先登录后使用，每日更新账号确保每个人都有使用的次数，新账号积分为100，获取每日免费账号请加Q群xxxxxx，[登录](/#/user)跳转",
   },
   Auth: {
     Title: "需要密码",
@@ -194,7 +194,7 @@ const cn = {
     Usage: {
       Title: "余额查询",
       SubTitle(used: any, total: any) {
-        return `本月已使用 $${used}，订阅总额 $${total}`;
+        return `本月已使用 ${used}，订阅总额 ${total}`;
       },
       IsChecking: "正在检查…",
       Check: "重新检查",

@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import SendWhiteIcon from "../icons/send-white.svg";
 import BrainIcon from "../icons/brain.svg";
@@ -63,7 +64,6 @@ import { IconButton } from "./button";
 import styles from "./chat.module.scss";
 
 import { ListItem, Modal, showConfirm, showPrompt, showToast } from "./ui-lib";
-import { useLocation, useNavigate } from "react-router-dom";
 import { LAST_INPUT_KEY, Path, REQUEST_TIMEOUT_MS } from "../constant";
 import { Avatar } from "./emoji";
 import { MaskAvatar, MaskConfig } from "./mask";
@@ -72,6 +72,8 @@ import { ChatCommandPrefix, useChatCommand, useCommand } from "../command";
 import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
+import useUser from "../hooks/useUser";
+import { emitEvent, subscribeEvent, unsubscribeEvent } from "../event/eventManager";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -496,6 +498,21 @@ export function Chat() {
   const [hitBottom, setHitBottom] = useState(true);
   const isMobileScreen = useMobileScreen();
   const navigate = useNavigate();
+  const { user, minusIntegral } = useUser();
+
+  const handleCustomEvent = () => {
+    minusIntegral()
+  };
+
+  useEffect(() => {
+    subscribeEvent('chat-finish', handleCustomEvent);
+
+    return () => {
+      unsubscribeEvent('chat-finish', handleCustomEvent);
+    };
+  }, []);
+
+  const goUser = () => navigate(Path.User);
 
   const onChatBodyScroll = (e: HTMLElement) => {
     const isTouchBottom = e.scrollTop + e.clientHeight >= e.scrollHeight - 10;
@@ -569,6 +586,13 @@ export function Chat() {
   };
 
   const doSubmit = (userInput: string) => {
+    if (!user) {
+      goUser();
+      return showToast("请先登录");
+    }
+    if (user.integral <= 0) {
+      return showToast("积分不足");
+    }
     if (userInput.trim() === "") return;
     const matchCommand = chatCommands.match(userInput);
     if (matchCommand.matched) {
@@ -577,6 +601,7 @@ export function Chat() {
       matchCommand.invoke();
       return;
     }
+
     setIsLoading(true);
     chatStore.onUserInput(userInput).then(() => setIsLoading(false));
     localStorage.setItem(LAST_INPUT_KEY, userInput);
@@ -694,6 +719,13 @@ export function Chat() {
   };
 
   const onResend = (botMessageId: number) => {
+    if (!user) {
+      goUser();
+      return showToast("请先登录");
+    }
+    if (user.integral <= 0) {
+      return showToast("积分不足");
+    }
     // find last user input message and resend
     const userIndex = findLastUserIndex(botMessageId);
     if (userIndex === null) return;

@@ -5,13 +5,14 @@ import {
 } from "@/app/constant";
 import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
 
-import { ChatOptions, getHeaders, LLMApi, LLMUsage } from "../api";
-import Locale from "../../locales";
 import {
   EventStreamContentType,
   fetchEventSource,
 } from "@fortaine/fetch-event-source";
 import { prettyObject } from "@/app/utils/format";
+import { ChatOptions, getHeaders, LLMApi, LLMUsage } from "../api";
+import Locale from "../../locales";
+import { emitEvent } from "../../event/eventManager";
 
 export class ChatGPTApi implements LLMApi {
   path(path: string): string {
@@ -131,6 +132,7 @@ export class ChatGPTApi implements LLMApi {
           },
           onmessage(msg) {
             if (msg.data === "[DONE]" || finished) {
+              emitEvent("chat-finish");
               return finish();
             }
             const text = msg.data;

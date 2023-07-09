@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import Cookies from "js-cookie";
-import useUserStore from "../store/user";
-import { showConfirm, showToast } from "../components/ui-lib";
+import { showConfirm } from "../components/ui-lib";
+import useUser from "./useUser";
 
 const useAuth = () => {
-  const { user, setUser } = <any>useUserStore();
+  const { setUser } = useUser();
 
   useEffect(() => {
     const userToken = Cookies.get("token");
@@ -28,22 +28,26 @@ const useAuth = () => {
       const { token: _token, userName: _userName, integral } = data.data;
       // 将用户信息保存到 cookie 中
       if (_token) {
-        Cookies.set("token", _token, { expires: 7 });
+        Cookies.set("token", _token, { expires: 30 });
       }
       setUser({ userName: _userName, integral });
     } else {
-      throw "登录失败";
+      throw "登录失败,密码不正确";
     }
   };
 
   const logout = async () => {
-    await showConfirm("确认退出当前账号？");
-    // 从 cookie 中移除用户信息
-    Cookies.remove("token");
-    setUser(null);
+    const result = await showConfirm("确认退出当前账号？");
+    if (result) {
+      // 从 cookie 中移除用户信息
+      Cookies.remove("token");
+      setUser(null);
+    } else {
+      throw "取消退出";
+    }
   };
 
-  return { user, login, logout };
+  return { login, logout };
 };
 
 export default useAuth;

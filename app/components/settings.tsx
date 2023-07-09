@@ -7,9 +7,11 @@ import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import CopyIcon from "../icons/copy.svg";
 import ClearIcon from "../icons/clear.svg";
-import LoadingIcon from "../icons/three-dots.svg";
+// import LoadingIcon from "../icons/three-dots.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
+import packageJson from '../../package.json'
+
 import {
   Input,
   List,
@@ -430,16 +432,16 @@ export function Settings() {
           </ListItem>
 
           <ListItem
-            title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
-            subTitle={
-              checkingUpdate
-                ? Locale.Settings.Update.IsChecking
-                : hasNewVersion
-                ? Locale.Settings.Update.FoundUpdate(remoteId ?? "ERROR")
-                : Locale.Settings.Update.IsLatest
-            }
+            title={Locale.Settings.Update.Version(`v${packageJson.version}`)}
+            // subTitle={
+            //   checkingUpdate
+            //     ? Locale.Settings.Update.IsChecking
+            //     : hasNewVersion
+            //     ? Locale.Settings.Update.FoundUpdate(remoteId ?? "ERROR")
+            //     : Locale.Settings.Update.IsLatest
+            // }
           >
-            {checkingUpdate ? (
+            {/* {checkingUpdate ? (
               <LoadingIcon />
             ) : hasNewVersion ? (
               <Link href={updateUrl} target="_blank" className="link">
@@ -451,7 +453,7 @@ export function Settings() {
                 text={Locale.Settings.Update.CheckUpdate}
                 onClick={() => checkUpdate(true)}
               />
-            )}
+            )} */}
           </ListItem>
 
           <ListItem title={Locale.Settings.SendKey}>
