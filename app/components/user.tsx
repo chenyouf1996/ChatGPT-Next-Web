@@ -9,7 +9,7 @@ import Locale from "../locales";
 import BotIcon from "../icons/bot.svg";
 import useUser from "../hooks/useUser";
 import useAuth from "../hooks/useAuth";
-import { showToast } from "./ui-lib";
+import { Loading, showToast } from "./ui-lib";
 import useVerifyForm from "../hooks/useVerifyForm";
 
 const User = () => {
@@ -17,6 +17,7 @@ const User = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [loginPage, setLoginPage] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { addUser } = useUser();
   const { login } = useAuth();
@@ -26,11 +27,14 @@ const User = () => {
   const goHome = () => navigate(Path.Home);
 
   const handleLogin = async () => {
+    setLoading(true);
     try {
       await login(userName, password);
       goHome();
     } catch (error: any) {
       showToast(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,12 +48,15 @@ const User = () => {
     } else if (!verifyEmail(email)) {
       return showToast("邮箱校验失败");
     }
+    setLoading(true);
     try {
       await addUser(userName, password, email);
       await login(userName, password);
       goHome();
     } catch (error: any) {
       showToast(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -59,84 +66,88 @@ const User = () => {
         <BotIcon />
       </div>
 
-      {user ? (
-        <div style={{ marginTop: 10 }}>您已登录</div>
-      ) : (
-        <Fragment>
-          <div className={styles["auth-title"]}>
-            {loginPage ? Locale.User.LoginTitle : Locale.User.RegisterTitle}
-          </div>
-          <div className={styles["auth-tips"]} style={{ marginBottom: 10 }}>
-            <span>{Locale.User.LoginSubTitle}</span>
-          </div>
+      {!loading ? (
+        user ? (
+          <div style={{ marginTop: 10 }}>您已登录</div>
+        ) : (
+          <Fragment>
+            <div className={styles["auth-title"]}>
+              {loginPage ? Locale.User.LoginTitle : Locale.User.RegisterTitle}
+            </div>
+            <div className={styles["auth-tips"]} style={{ marginBottom: 10 }}>
+              <span>{Locale.User.LoginSubTitle}</span>
+            </div>
 
-          <input
-            style={{ marginBottom: 10 }}
-            type="text"
-            placeholder={Locale.User.UserName}
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-          />
-
-          <input
-            type="password"
-            style={{ marginBottom: 10 }}
-            placeholder={Locale.User.Password}
-            value={password}
-            onChange={(e: any) => setPassword(e.target.value)}
-          />
-
-          {!loginPage && (
             <input
-              type="text"
-              placeholder={Locale.User.email}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
               style={{ marginBottom: 10 }}
+              type="text"
+              placeholder={Locale.User.UserName}
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
             />
-          )}
 
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "row",
-              position: "relative",
-              marginTop: 10,
-            }}
-          >
-            <div>
-              {loginPage ? (
-                <IconButton
-                  text={Locale.User.LoginBtn}
-                  type="primary"
-                  onClick={handleLogin}
-                  style={{ width: "100px" }}
-                />
-              ) : (
-                <IconButton
-                  text={Locale.User.RegisterBtn}
-                  type="primary"
-                  onClick={handleRegister}
-                  style={{ width: "100px" }}
-                />
-              )}
+            <input
+              type="password"
+              style={{ marginBottom: 10 }}
+              placeholder={Locale.User.Password}
+              value={password}
+              onChange={(e: any) => setPassword(e.target.value)}
+            />
+
+            {!loginPage && (
+              <input
+                type="text"
+                placeholder={Locale.User.email}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ marginBottom: 10 }}
+              />
+            )}
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+                position: "relative",
+                marginTop: 10,
+              }}
+            >
+              <div>
+                {loginPage ? (
+                  <IconButton
+                    text={Locale.User.LoginBtn}
+                    type="primary"
+                    onClick={handleLogin}
+                    style={{ width: "100px" }}
+                  />
+                ) : (
+                  <IconButton
+                    text={Locale.User.RegisterBtn}
+                    type="primary"
+                    onClick={handleRegister}
+                    style={{ width: "100px" }}
+                  />
+                )}
+              </div>
+              <div style={{ position: "absolute", left: "110px" }}>
+                {!loginPage ? (
+                  <IconButton
+                    text={Locale.User.LoginBtn}
+                    onClick={() => setLoginPage(true)}
+                  />
+                ) : (
+                  <IconButton
+                    text={Locale.User.RegisterBtn}
+                    onClick={() => setLoginPage(false)}
+                  />
+                )}
+              </div>
             </div>
-            <div style={{ position: "absolute", left: "110px" }}>
-              {!loginPage ? (
-                <IconButton
-                  text={Locale.User.LoginBtn}
-                  onClick={() => setLoginPage(true)}
-                />
-              ) : (
-                <IconButton
-                  text={Locale.User.RegisterBtn}
-                  onClick={() => setLoginPage(false)}
-                />
-              )}
-            </div>
-          </div>
-        </Fragment>
+          </Fragment>
+        )
+      ) : (
+        <Loading />
       )}
     </div>
   );
