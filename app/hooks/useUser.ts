@@ -24,6 +24,7 @@ const useUser = () => {
   };
 
   const minusIntegral = async () => {
+    if (!user) return;
     const res = await fetch("/api/user/integral/minus", {
       method: "POST",
       headers: {
@@ -41,28 +42,49 @@ const useUser = () => {
     }
   };
 
-  // const findUser = async (id: string) => {
-  //   const res = await fetch(`/api/user/${id}`);
-  //   const userInfo = await res.json();
-  //   console.log(userInfo);
+  const addIntegral = async () => {
+    if (!user) return;
+    const res = await fetch("/api/user/integral/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userName: user.userName }),
+    });
+    if (res.status === 200) {
+      const data = await res.json();
+      const updatedUser = data.data;
+      setUser(updatedUser);
+      return updatedUser;
+    } else {
+      throw "error";
+    }
+  };
 
-  //   return userInfo
-  // };
+  const findUser = async (userName: string) => {
+    const res = await fetch(`/api/user/${userName}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const userInfo = await res.json();
+    return userInfo;
+  };
 
-  // const deleteUser = async (id: string) => {
-  //   await fetch(`/api/user/${id}`, {
-  //     method: "DELETE",
-  //   });
-  // };
+  const getUserIntegral = async (userName: string) => {
+    const res = await findUser(userName);
+    return res?.data?.integral || 0;
+  };
 
   return {
-    addUser,
-    minusIntegral,
-    // findUser,
     user,
     setUser,
-    // deleteUser,
-    // fetchUsers,
+    addUser,
+    minusIntegral,
+    addIntegral,
+    findUser,
+    getUserIntegral,
   };
 };
 

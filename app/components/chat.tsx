@@ -79,7 +79,7 @@ import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import useUser from "../hooks/useUser";
-import { emitEvent, subscribeEvent, unsubscribeEvent } from "../event/eventManager";
+import { subscribeEvent, unsubscribeEvent } from "../event/eventManager";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -542,17 +542,17 @@ export function Chat() {
   const [hitBottom, setHitBottom] = useState(true);
   const isMobileScreen = useMobileScreen();
   const navigate = useNavigate();
-  const { user, minusIntegral } = useUser();
+  const { user, minusIntegral, addIntegral } = useUser();
 
   const handleCustomEvent = () => {
-    minusIntegral()
+    addIntegral();
   };
 
   useEffect(() => {
-    subscribeEvent('chat-finish', handleCustomEvent);
+    subscribeEvent("chat-fail", handleCustomEvent);
 
     return () => {
-      unsubscribeEvent('chat-finish', handleCustomEvent);
+      unsubscribeEvent("chat-fail", handleCustomEvent);
     };
   }, []);
 
@@ -629,7 +629,8 @@ export function Chat() {
     }
   };
 
-  const doSubmit = (userInput: string) => {
+  const doSubmit = async (userInput: string) => {
+    await minusIntegral()
     if (!user) {
       goUser();
       return showToast("请先登录");
@@ -761,7 +762,8 @@ export function Chat() {
     deleteMessage(msgId);
   };
 
-  const onResend = (message: ChatMessage) => {
+  const onResend = async (message: ChatMessage) => {
+    await minusIntegral()
     if (!user) {
       goUser();
       return showToast("请先登录");
@@ -769,7 +771,7 @@ export function Chat() {
     if (user.integral <= 0) {
       return showToast("积分不足");
     }
-    
+
     let content = message.content;
 
     if (message.role === "assistant" && message.id) {
@@ -863,6 +865,9 @@ export function Chat() {
   };
 
   const clientConfig = useMemo(() => getClientConfig(), []);
+  const hasTyping = useMemo(() => {
+    return messages.some(messageItem => messageItem.streaming)
+  }, [messages]);
 
   const location = useLocation();
   const isChat = location.pathname === Path.Chat;
@@ -1122,6 +1127,7 @@ export function Chat() {
             className={styles["chat-input-send"]}
             type="primary"
             onClick={() => doSubmit(userInput)}
+            disabled={hasTyping}
           />
         </div>
       </div>

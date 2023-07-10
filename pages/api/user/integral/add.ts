@@ -9,7 +9,7 @@ export default async function handler(req: any, res: any) {
     const user = await Users.findOne({ userName });
     const updatedUser = await Users.findOneAndUpdate(
       { userName },
-      { $set: { integral: user.integral > 0 ? user.integral - 1 : 0 } },
+      { $set: { integral: user.integral + 1 } },
       { new: true },
     );
 

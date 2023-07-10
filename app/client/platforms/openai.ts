@@ -122,6 +122,8 @@ export class ChatGPTApi implements LLMApi {
                 ?.startsWith(EventStreamContentType) ||
               res.status !== 200
             ) {
+              emitEvent("chat-fail");
+              
               const responseTexts = [responseText];
               let extraInfo = await res.clone().text();
               try {
@@ -144,7 +146,6 @@ export class ChatGPTApi implements LLMApi {
           },
           onmessage(msg) {
             if (msg.data === "[DONE]" || finished) {
-              emitEvent("chat-finish");
               return finish();
             }
             const text = msg.data;

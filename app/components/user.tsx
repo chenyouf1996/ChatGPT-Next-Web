@@ -62,15 +62,19 @@ const User = () => {
 
   return (
     <div className={styles["auth-page"]}>
-      <div className={`no-dark ${styles["auth-logo"]}`}>
-        <BotIcon />
-      </div>
-
       {!loading ? (
         user ? (
-          <div style={{ marginTop: 10 }}>您已登录</div>
+          <Fragment>
+            <div className={`no-dark ${styles["auth-logo"]}`}>
+              <BotIcon />
+            </div>
+            <div style={{ marginTop: 10 }}>您已登录</div>
+          </Fragment>
         ) : (
           <Fragment>
+            <div className={`no-dark ${styles["auth-logo"]}`}>
+              <BotIcon />
+            </div>
             <div className={styles["auth-title"]}>
               {loginPage ? Locale.User.LoginTitle : Locale.User.RegisterTitle}
             </div>
