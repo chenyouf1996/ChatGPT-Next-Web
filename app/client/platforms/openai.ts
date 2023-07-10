@@ -5,6 +5,8 @@ import {
 } from "@/app/constant";
 import { useAccessStore, useAppConfig, useChatStore } from "@/app/store";
 
+import { ChatOptions, getHeaders, LLMApi, LLMModel, LLMUsage } from "../api";
+import Locale from "../../locales";
 import {
   EventStreamContentType,
   fetchEventSource,
@@ -14,6 +16,15 @@ import { ChatOptions, getHeaders, LLMApi, LLMUsage } from "../api";
 import Locale from "../../locales";
 import { emitEvent } from "../../event/eventManager";
 
+export interface OpenAIListModelResponse {
+  object: string;
+  data: Array<{
+    id: string;
+    object: string;
+    root: string;
+  }>;
+}
+
 export class ChatGPTApi implements LLMApi {
   path(path: string): string {
     let openaiUrl = useAccessStore.getState().openaiUrl;
@@ -22,6 +33,9 @@ export class ChatGPTApi implements LLMApi {
     }
     if (openaiUrl.endsWith("/")) {
       openaiUrl = openaiUrl.slice(0, openaiUrl.length - 1);
+    }
+    if (!openaiUrl.startsWith("http") && !openaiUrl.startsWith("/api/openai")) {
+      openaiUrl = "https://" + openaiUrl;
     }
     return [openaiUrl, path].join("/");
   }
@@ -233,6 +247,28 @@ export class ChatGPTApi implements LLMApi {
       used: response.total_usage,
       total: total.hard_limit_usd,
     } as LLMUsage;
+  }
+
+  async models(): Promise<LLMModel[]> {
+    const res = await fetch(this.path(OpenaiPath.ListModelPath), {
+      method: "GET",
+      headers: {
+        ...getHeaders(),
+      },
+    });
+
+    const resJson = (await res.json()) as OpenAIListModelResponse;
+    const chatModels = resJson.data?.filter((m) => m.id.startsWith("gpt-"));
+    console.log("[Models]", chatModels);
+
+    if (!chatModels) {
+      return [];
+    }
+
+    return chatModels.map((m) => ({
+      name: m.id,
+      available: true,
+    }));
   }
 }
 export { OpenaiPath };
