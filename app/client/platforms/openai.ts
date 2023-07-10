@@ -12,8 +12,6 @@ import {
   fetchEventSource,
 } from "@fortaine/fetch-event-source";
 import { prettyObject } from "@/app/utils/format";
-import { ChatOptions, getHeaders, LLMApi, LLMUsage } from "../api";
-import Locale from "../../locales";
 import { emitEvent } from "../../event/eventManager";
 
 export interface OpenAIListModelResponse {
