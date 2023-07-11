@@ -9,6 +9,17 @@ const tw: PartialLocaleType = {
   ChatItem: {
     ChatItemCount: (count: number) => `${count} 條對話`,
   },
+  User: {
+    Name: "登录/注册",
+    LoginTitle: '登录账号',
+    RegisterTitle: '注册账号',
+    LoginSubTitle: '加入qq群xxx获取最新体验账号',
+    LoginBtn: '登录',
+    RegisterBtn: '注册',
+    UserName: '用户名',
+    Password: '密码',
+    email: '邮箱'
+  },
   Chat: {
     SubTitle: (count: number) => `您已經與 ChatGPT 進行了 ${count} 條對話`,
     Actions: {

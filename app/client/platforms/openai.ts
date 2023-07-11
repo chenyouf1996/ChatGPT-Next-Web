@@ -12,6 +12,7 @@ import {
   fetchEventSource,
 } from "@fortaine/fetch-event-source";
 import { prettyObject } from "@/app/utils/format";
+import { emitEvent } from "../../event/eventManager";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -121,6 +122,8 @@ export class ChatGPTApi implements LLMApi {
                 ?.startsWith(EventStreamContentType) ||
               res.status !== 200
             ) {
+              emitEvent("chat-fail");
+              
               const responseTexts = [responseText];
               let extraInfo = await res.clone().text();
               try {
