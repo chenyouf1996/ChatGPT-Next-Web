@@ -5,6 +5,8 @@ const UsersSchema = new mongoose.Schema({
   password: String,
   email: String,
   integral: Number,
+  todayRank: Number,
+  totalRank: Number,
 });
 
 const Users = mongoose.models.Users || mongoose.model("Users", UsersSchema);

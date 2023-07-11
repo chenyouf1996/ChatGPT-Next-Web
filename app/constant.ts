@@ -17,6 +17,8 @@ export enum Path {
   Masks = "/masks",
   Auth = "/auth",
   User = "/user",
+  Rank = "/rank",
+  UpdateRank = "/updateRank",
 }
 
 export enum SlotID {

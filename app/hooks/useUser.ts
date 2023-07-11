@@ -77,6 +77,18 @@ const useUser = () => {
     return res?.data?.integral || 0;
   };
 
+  const getAllUser = async () => {
+    const res = await fetch(`/api/user/all`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    
+    return data.data;
+  };
+
   return {
     user,
     setUser,
@@ -85,6 +97,7 @@ const useUser = () => {
     addIntegral,
     findUser,
     getUserIntegral,
+    getAllUser,
   };
 };
 
