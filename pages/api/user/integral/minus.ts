@@ -6,10 +6,9 @@ export default async function handler(req: any, res: any) {
 
   if (req.method === "POST") {
     const { userName } = req.body;
-    const user = await Users.findOne({ userName });
     const updatedUser = await Users.findOneAndUpdate(
       { userName },
-      { $set: { integral: user.integral > 0 ? user.integral - 1 : 0 } },
+      { $inc: { integral: -1 } },
       { new: true },
     );
 

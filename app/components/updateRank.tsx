@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { read, utils } from "xlsx";
 import styles from "./rank.module.scss";
+import useRank from "../hooks/useRank";
+import { showToast } from "./ui-lib";
 
 const UpdateRank = () => {
   const [rankList, setRankList] = useState<any>([]);
+  const { update, reset } = useRank();
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
@@ -24,7 +27,7 @@ const UpdateRank = () => {
         if (!rankMap[userName]) {
           rankMap[userName] = { userName, todayRank: todayRank };
         } else {
-          rankMap[userName].rank += Number(todayRank);
+          rankMap[userName].todayRank += Number(todayRank);
         }
       });
 
@@ -34,16 +37,35 @@ const UpdateRank = () => {
     reader.readAsArrayBuffer(file);
   };
 
+  const handleUpdate = () => {
+    update(rankList).then((res: any) => {
+      console.log(res);
+      showToast(`更新排行榜完成失败数${res?.failList?.length || 0}`);
+    });
+  };
+
+  const handleReset = () => {
+    reset().then(() => {
+      showToast(`重置排行榜成功`);
+    });
+  };
+
   return (
     <div>
-      <h2>Excel Upload Demo</h2>
+      <h2>上传排行榜数据</h2>
       <input type="file" accept=".xls,.xlsx" onChange={handleFileChange} />
+      <button disabled={!rankList.length} onClick={handleUpdate}>
+        更新排行榜数据
+      </button>
+      <button style={{ marginLeft: "10px" }} onClick={handleReset}>
+        重置总排行榜数据
+      </button>
       <div className={styles["rank"]}>
         <table>
           <thead>
             <tr>
-              <th>Rank</th>
-              <th>Name</th>
+              <th>用户名</th>
+              <th>今日排行榜数据</th>
             </tr>
           </thead>
           <tbody>

@@ -16,7 +16,7 @@ const Rank = () => {
 
   return (
     <div className={styles["rank"]}>
-      <h1>rank</h1>
+      <h1>排行榜</h1>
       <table>
         <thead>
           <tr>
