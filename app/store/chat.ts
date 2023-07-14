@@ -91,7 +91,7 @@ interface ChatStore {
   currentSession: () => ChatSession;
   nextSession: (delta: number) => void;
   onNewMessage: (message: ChatMessage) => void;
-  onUserInput: (content: string) => Promise<void>;
+  onUserInput: (content: string, minusIntegral: Function) => Promise<void>;
   summarizeSession: () => void;
   updateStat: (message: ChatMessage) => void;
   updateCurrentSession: (updater: (session: ChatSession) => void) => void;
@@ -274,7 +274,7 @@ export const useChatStore = create<ChatStore>()(
         get().summarizeSession();
       },
 
-      async onUserInput(content) {
+      async onUserInput(content, minusIntegral) {
         const session = get().currentSession();
         const modelConfig = session.mask.modelConfig;
 
@@ -314,6 +314,10 @@ export const useChatStore = create<ChatStore>()(
         api.llm.chat({
           messages: sendMessages,
           config: { ...modelConfig, stream: true },
+          async onBefore() {
+            const res = await minusIntegral();
+            return res;
+          },
           onUpdate(message) {
             botMessage.streaming = true;
             if (message) {

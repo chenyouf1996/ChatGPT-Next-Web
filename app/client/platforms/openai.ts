@@ -100,6 +100,17 @@ export class ChatGPTApi implements LLMApi {
 
         controller.signal.onabort = finish;
 
+        const user = await options.onBefore?.();
+
+        if (user && user.currentIntegral <= 0) {
+          options.onError?.({
+            name: "积分不足",
+            message:
+              "积分不足, 加群xxxxxx可获取50积分，群内每日更新积分获取方式和体验账号",
+          });
+          return;
+        }
+
         fetchEventSource(chatPath, {
           ...chatPayload,
           async onopen(res) {

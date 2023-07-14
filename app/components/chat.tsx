@@ -630,13 +630,9 @@ export function Chat() {
   };
 
   const doSubmit = async (userInput: string) => {
-    await minusIntegral()
     if (!user) {
       goUser();
       return showToast("请先登录");
-    }
-    if (user.integral <= 0) {
-      return showToast("积分不足");
     }
     if (userInput.trim() === "") return;
     const matchCommand = chatCommands.match(userInput);
@@ -646,9 +642,10 @@ export function Chat() {
       matchCommand.invoke();
       return;
     }
-
     setIsLoading(true);
-    chatStore.onUserInput(userInput).then(() => setIsLoading(false));
+    chatStore
+      .onUserInput(userInput, minusIntegral)
+      .then(() => setIsLoading(false));
     localStorage.setItem(LAST_INPUT_KEY, userInput);
     setUserInput("");
     setPromptHints([]);
@@ -707,23 +704,6 @@ export function Chat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // check if should send message
-  const onInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // if ArrowUp and no userInput, fill with last input
-    if (
-      e.key === "ArrowUp" &&
-      userInput.length <= 0 &&
-      !(e.metaKey || e.altKey || e.ctrlKey)
-    ) {
-      setUserInput(localStorage.getItem(LAST_INPUT_KEY) ?? "");
-      e.preventDefault();
-      return;
-    }
-    if (shouldSubmit(e) && promptHints.length === 0) {
-      doSubmit(userInput);
-      e.preventDefault();
-    }
-  };
   const onRightClick = (e: any, message: ChatMessage) => {
     // copy to clipboard
     if (selectOrCopy(e.currentTarget, message.content)) {
@@ -763,15 +743,10 @@ export function Chat() {
   };
 
   const onResend = async (message: ChatMessage) => {
-    await minusIntegral()
     if (!user) {
       goUser();
       return showToast("请先登录");
     }
-    if (user.integral <= 0) {
-      return showToast("积分不足");
-    }
-
     let content = message.content;
 
     if (message.role === "assistant" && message.id) {
@@ -780,9 +755,10 @@ export function Chat() {
         content = session.messages.at(userIndex)?.content ?? content;
       }
     }
-
     setIsLoading(true);
-    chatStore.onUserInput(content).then(() => setIsLoading(false));
+    chatStore
+      .onUserInput(content, minusIntegral)
+      .then(() => setIsLoading(false));
     inputRef.current?.focus();
   };
 
@@ -866,7 +842,7 @@ export function Chat() {
 
   const clientConfig = useMemo(() => getClientConfig(), []);
   const hasTyping = useMemo(() => {
-    return messages.some(messageItem => messageItem.streaming)
+    return messages.some((messageItem) => messageItem.streaming);
   }, [messages]);
 
   const location = useLocation();
@@ -874,6 +850,24 @@ export function Chat() {
 
   const autoFocus = !isMobileScreen || isChat; // only focus in chat page
   const showMaxIcon = !isMobileScreen && !clientConfig?.isApp;
+
+  // check if should send message
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // if ArrowUp and no userInput, fill with last input
+    if (
+      e.key === "ArrowUp" &&
+      userInput.length <= 0 &&
+      !(e.metaKey || e.altKey || e.ctrlKey)
+    ) {
+      setUserInput(localStorage.getItem(LAST_INPUT_KEY) ?? "");
+      e.preventDefault();
+      return;
+    }
+    if (!hasTyping && shouldSubmit(e) && promptHints.length === 0) {
+      doSubmit(userInput);
+      e.preventDefault();
+    }
+  };
 
   useCommand({
     fill: setUserInput,
