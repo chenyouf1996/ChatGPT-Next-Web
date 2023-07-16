@@ -106,7 +106,7 @@ export class ChatGPTApi implements LLMApi {
           options.onError?.({
             name: "积分不足",
             message:
-              "积分不足, 加群xxxxxx可获取50积分，群内每日更新积分获取方式和体验账号",
+              "积分不足，本平台永久免费，暂定每日使用总额为输入+输出200W汉字，为避免有不良用户滥用影响其他用户基本使用、采取账号积分制，请加Q群209119779联系获取新的体验账号",
           });
           return;
         }
@@ -134,7 +134,7 @@ export class ChatGPTApi implements LLMApi {
               res.status !== 200
             ) {
               emitEvent("chat-fail");
-              
+
               const responseTexts = [responseText];
               let extraInfo = await res.clone().text();
               try {

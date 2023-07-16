@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { read, utils } from "xlsx";
 import styles from "./rank.module.scss";
 import useRank from "../hooks/useRank";
@@ -25,7 +25,7 @@ const UpdateRank = () => {
         const todayRank = row["今日关注数量：（必填）"];
 
         if (!rankMap[userName]) {
-          rankMap[userName] = { userName, todayRank: todayRank };
+          rankMap[userName] = { userName, todayRank: +todayRank };
         } else {
           rankMap[userName].todayRank += Number(todayRank);
         }
@@ -50,7 +50,9 @@ const UpdateRank = () => {
     });
   };
 
-  return (
+  return "" ? (
+    <Fragment></Fragment>
+  ) : (
     <div>
       <h2>上传排行榜数据</h2>
       <input type="file" accept=".xls,.xlsx" onChange={handleFileChange} />

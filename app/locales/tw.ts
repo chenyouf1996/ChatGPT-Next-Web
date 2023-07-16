@@ -13,7 +13,7 @@ const tw: PartialLocaleType = {
     Name: "登录/注册",
     LoginTitle: '登录账号',
     RegisterTitle: '注册账号',
-    LoginSubTitle: '加入qq群xxx获取最新体验账号',
+    LoginSubTitle: '有任何使用上的问题请加Q群209119779反馈',
     LoginBtn: '登录',
     RegisterBtn: '注册',
     UserName: '用户名',

@@ -26,10 +26,10 @@ const User = () => {
 
   const goHome = () => navigate(Path.Home);
 
-  const handleLogin = async () => {
+  const handleLogin = async (name: string, word: string) => {
     setLoading(true);
     try {
-      await login(userName, password);
+      await login(name, word);
       goHome();
     } catch (error: any) {
       showToast(error);
@@ -122,7 +122,7 @@ const User = () => {
                   <IconButton
                     text={Locale.User.LoginBtn}
                     type="primary"
-                    onClick={handleLogin}
+                    onClick={() => handleLogin(userName, password)}
                     style={{ width: "100px" }}
                   />
                 ) : (
@@ -141,10 +141,18 @@ const User = () => {
                     onClick={() => setLoginPage(true)}
                   />
                 ) : (
-                  <IconButton
-                    text={Locale.User.RegisterBtn}
-                    onClick={() => setLoginPage(false)}
-                  />
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <IconButton
+                      text={Locale.User.RegisterBtn}
+                      onClick={() => setLoginPage(false)}
+                    />
+                    <IconButton
+                      text={"游客登录"}
+                      onClick={() => {
+                        handleLogin("visitor", "abc123...");
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             </div>

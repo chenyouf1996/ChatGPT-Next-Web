@@ -47,26 +47,26 @@ const Rank = () => {
   };
 
   const todayRankAward: any = {
-    1: "300积分+300￥",
-    2: "200积分+200￥",
-    3: "100积分+100￥",
+    1: "100积分",
+    2: "50积分",
+    3: "25积分",
   };
 
-  const weekRankAward: any = {
-    1: "300积分+300￥",
-    2: "200积分+200￥",
-    3: "100积分+100￥",
-  };
+  // const weekRankAward: any = {
+  //   1: "300积分",
+  //   2: "200积分",
+  //   3: "100积分",
+  // };
 
   return (
     <div className={styles["rank"]}>
       <div className={styles["rank-title"]}>
         <div className={styles["row-end"]}>
           <span className="title">排行榜</span>
-          <IconButton
+          {/* <IconButton
             text={rankType === "today" ? "切换周榜" : "切换日榜"}
             onClick={() => changeRank(rankType)}
-          />
+          /> */}
         </div>
         <IconButton
           icon={<CloseIcon />}
@@ -82,8 +82,8 @@ const Rank = () => {
             <th>用户名</th>
             <th>今日完成量</th>
             <th>每日激励</th>
-            <th>周完成量</th>
-            <th>每周激励</th>
+            {/* <th>周完成量</th>
+            <th>每周激励</th> */}
           </tr>
         </thead>
         <tbody>
@@ -93,8 +93,8 @@ const Rank = () => {
               <td>{userItem.userName}</td>
               <td>{userItem.todayRank}</td>
               <td>{todayRankAward[index + 1]}</td>
-              <td>{userItem.totalRank}</td>
-              <td>{weekRankAward[index + 1]}</td>
+              {/* <td>{userItem.totalRank}</td>
+              <td>{weekRankAward[index + 1]}</td> */}
             </tr>
           ))}
         </tbody>
