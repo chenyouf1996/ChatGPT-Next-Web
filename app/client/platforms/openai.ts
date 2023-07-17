@@ -111,6 +111,15 @@ export class ChatGPTApi implements LLMApi {
           return;
         }
 
+        const res = await fetch(`/api/key/get`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const keyData = await res.json();
+        chatPayload.headers.Authorization = keyData.data;
+
         fetchEventSource(chatPath, {
           ...chatPayload,
           async onopen(res) {
@@ -175,6 +184,8 @@ export class ChatGPTApi implements LLMApi {
             finish();
           },
           onerror(e) {
+            emitEvent("chat-fail");
+
             options.onError?.(e);
             throw e;
           },

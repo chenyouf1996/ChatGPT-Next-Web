@@ -19,6 +19,7 @@ export enum Path {
   User = "/user",
   Rank = "/rank",
   UpdateRank = "/updateRank",
+  ManageKey = "/manageKey",
 }
 
 export enum SlotID {
