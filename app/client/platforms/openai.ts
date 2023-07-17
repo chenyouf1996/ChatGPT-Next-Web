@@ -118,7 +118,7 @@ export class ChatGPTApi implements LLMApi {
           },
         });
         const keyData = await res.json();
-        chatPayload.headers.Authorization = keyData.data;
+        chatPayload.headers.Authorization = `Bearer ${keyData?.data?.trim()}`;
 
         fetchEventSource(chatPath, {
           ...chatPayload,

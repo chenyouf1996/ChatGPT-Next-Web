@@ -3,8 +3,7 @@ import { SubmitKey } from "../store/config";
 const cn = {
   WIP: "该功能仍在开发中……",
   Error: {
-    Unauthorized:
-      "请先登录后使用，每日更新账号确保每个人都有使用的次数，新账号积分为100，获取每日免费账号请加Q群xxxxxx，[登录](/#/user)跳转",
+    Unauthorized: "运行出错，可加q群209119779反馈问题",
   },
   Auth: {
     Title: "需要密码",
@@ -271,14 +270,14 @@ const cn = {
   },
   User: {
     Name: "登录/注册",
-    LoginTitle: '登录账号',
-    RegisterTitle: '注册账号',
-    LoginSubTitle: '有任何使用上的问题请加Q群209119779反馈',
-    LoginBtn: '登录',
-    RegisterBtn: '注册',
-    UserName: '用户名',
-    Password: '密码',
-    email: '邮箱'
+    LoginTitle: "登录账号",
+    RegisterTitle: "注册账号",
+    LoginSubTitle: "有任何使用上的问题请加Q群209119779反馈",
+    LoginBtn: "登录",
+    RegisterBtn: "注册",
+    UserName: "用户名",
+    Password: "密码",
+    email: "邮箱",
   },
   Plugin: {
     Name: "插件",
