@@ -110,8 +110,8 @@ export class ChatGPTApi implements LLMApi {
           });
           return;
         }
-
-        if(globalThis.test) {
+        const cyfGlobal = globalThis as any
+        if(cyfGlobal.test) {
           const res = await fetch(`/api/key/get`, {
             method: "POST",
             headers: {

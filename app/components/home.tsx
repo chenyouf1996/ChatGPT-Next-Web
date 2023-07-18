@@ -135,8 +135,6 @@ function Screen() {
     loadAsyncGoogleFont();
   }, []);
 
-  const cyfGlobal: any = globalThis;
-
   return (
     <div
       className={
