@@ -10,7 +10,7 @@ import ClearIcon from "../icons/clear.svg";
 // import LoadingIcon from "../icons/three-dots.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
-import packageJson from '../../package.json'
+import packageJson from "../../package.json";
 
 import {
   Input,
@@ -615,7 +615,7 @@ export function Settings() {
           </ListItem>
         </List>
 
-        {/* <List>
+        <List>
           {showAccessCode ? (
             <ListItem
               title={Locale.Settings.AccessCode.Title}
@@ -720,7 +720,7 @@ export function Settings() {
               onClick={() => setShowPromptModal(true)}
             />
           </ListItem>
-        </List> */}
+        </List>
 
         <SyncItems />
 

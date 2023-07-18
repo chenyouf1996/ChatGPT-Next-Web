@@ -165,9 +165,19 @@ export function SideBar(props: { className?: string }) {
 
       <div className={styles["sidebar-header-bar"]}>
         <IconButton
-          text={'排行榜'}
+          text={"排行榜"}
           className={styles["sidebar-bar-button"]}
           onClick={() => navigate(Path.Rank, { state: { fromHome: true } })}
+          shadow
+        />
+        <IconButton
+          text={"交流群"}
+          className={styles["sidebar-bar-button"]}
+          onClick={() =>
+            window.open(
+              "https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=KmqVE6OyQnkrqe0gv_MsYNalHs6LotJw&authKey=ktIZLcO4zePw9t15MZrsaw1wpvAOdeZMtIeThE91jH%2BGfqaS5RDnXursbhbJxobZ&noverify=0&group_code=209119779",
+            )
+          }
           shadow
         />
       </div>

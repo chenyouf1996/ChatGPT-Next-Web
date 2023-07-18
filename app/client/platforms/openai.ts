@@ -111,15 +111,17 @@ export class ChatGPTApi implements LLMApi {
           return;
         }
 
-        const res = await fetch(`/api/key/get`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const keyData = await res.json();
-        chatPayload.headers.Authorization = `Bearer ${keyData?.data?.trim()}`;
-
+        if(globalThis.test) {
+          const res = await fetch(`/api/key/get`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const keyData = await res.json();
+          chatPayload.headers.Authorization = `Bearer ${keyData?.data?.trim()}`;
+        }
+        
         fetchEventSource(chatPath, {
           ...chatPayload,
           async onopen(res) {
