@@ -5,7 +5,7 @@ export default async function handler(req: any, res: any) {
   await dbConnect();
 
   if (req.method === "POST") {
-    const update = { $set: { totalRank: 0 } };
+    const update = { $set: { todayRank: 0 } };
     await Users.updateMany({}, update);
 
     res.status(200).json({

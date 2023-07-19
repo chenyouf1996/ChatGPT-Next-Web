@@ -13,7 +13,7 @@ export default async function handler(req: any, res: any) {
         message: "当前用户名已存在",
       });
     } else {
-      const users = new Users({ userName, password, email, integral: 0 });
+      const users = new Users({ userName, password, email, integral: 0, todayRank: 0 });
       await users.save();
       res
         .status(200)

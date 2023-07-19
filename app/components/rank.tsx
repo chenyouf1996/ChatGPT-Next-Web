@@ -91,7 +91,7 @@ const Rank = () => {
             <tr key={userItem.userName}>
               <td className={styles["index"]}>{index + 1}</td>
               <td>{userItem.userName}</td>
-              <td>{userItem.todayRank}</td>
+              <td>{userItem.todayRank || 0}</td>
               <td>{todayRankAward[index + 1]}</td>
               {/* <td>{userItem.totalRank}</td>
               <td>{weekRankAward[index + 1]}</td> */}
