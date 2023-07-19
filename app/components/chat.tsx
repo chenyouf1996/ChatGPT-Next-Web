@@ -79,6 +79,8 @@ import { ChatCommandPrefix, useChatCommand, useCommand } from "../command";
 import { prettyObject } from "../utils/format";
 import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
+import useUser from "../hooks/useUser";
+import { subscribeEvent, unsubscribeEvent } from "../event/eventManager";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -541,6 +543,21 @@ export function Chat() {
   const [hitBottom, setHitBottom] = useState(true);
   const isMobileScreen = useMobileScreen();
   const navigate = useNavigate();
+  const { user, minusIntegral, addIntegral } = useUser();
+
+  const handleCustomEvent = () => {
+    addIntegral();
+  };
+
+  useEffect(() => {
+    subscribeEvent("chat-fail", handleCustomEvent);
+
+    return () => {
+      unsubscribeEvent("chat-fail", handleCustomEvent);
+    };
+  }, []);
+
+  const goUser = () => navigate(Path.User);
 
   const onChatBodyScroll = (e: HTMLElement) => {
     const isTouchBottom = e.scrollTop + e.clientHeight >= e.scrollHeight - 10;
@@ -613,7 +630,11 @@ export function Chat() {
     }
   };
 
-  const doSubmit = (userInput: string) => {
+  const doSubmit = async (userInput: string) => {
+    if (!user) {
+      goUser();
+      return showToast("请先登录");
+    }
     if (userInput.trim() === "") return;
     const matchCommand = chatCommands.match(userInput);
     if (matchCommand.matched) {
@@ -623,7 +644,9 @@ export function Chat() {
       return;
     }
     setIsLoading(true);
-    chatStore.onUserInput(userInput).then(() => setIsLoading(false));
+    chatStore
+      .onUserInput(userInput, minusIntegral)
+      .then(() => setIsLoading(false));
     localStorage.setItem(LAST_INPUT_KEY, userInput);
     setUserInput("");
     setPromptHints([]);
@@ -682,23 +705,6 @@ export function Chat() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // check if should send message
-  const onInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // if ArrowUp and no userInput, fill with last input
-    if (
-      e.key === "ArrowUp" &&
-      userInput.length <= 0 &&
-      !(e.metaKey || e.altKey || e.ctrlKey)
-    ) {
-      setUserInput(localStorage.getItem(LAST_INPUT_KEY) ?? "");
-      e.preventDefault();
-      return;
-    }
-    if (shouldSubmit(e) && promptHints.length === 0) {
-      doSubmit(userInput);
-      e.preventDefault();
-    }
-  };
   const onRightClick = (e: any, message: ChatMessage) => {
     // copy to clipboard
     if (selectOrCopy(e.currentTarget, message.content)) {
@@ -743,6 +749,10 @@ export function Chat() {
     // 2. for a bot's message, find the last user's input
     // 3. delete original user input and bot's message
     // 4. resend the user's input
+    if (!user) {
+      goUser();
+      return showToast("请先登录");
+    }
 
     const resendingIndex = session.messages.findIndex(
       (m) => m.id === message.id,
@@ -787,7 +797,7 @@ export function Chat() {
 
     // resend the message
     setIsLoading(true);
-    chatStore.onUserInput(userMessage.content).then(() => setIsLoading(false));
+    chatStore.onUserInput(userMessage.content, minusIntegral).then(() => setIsLoading(false));
     inputRef.current?.focus();
   };
 
@@ -870,12 +880,33 @@ export function Chat() {
   };
 
   const clientConfig = useMemo(() => getClientConfig(), []);
+  const hasTyping = useMemo(() => {
+    return messages.some((messageItem) => messageItem.streaming);
+  }, [messages]);
 
   const location = useLocation();
   const isChat = location.pathname === Path.Chat;
 
   const autoFocus = !isMobileScreen || isChat; // only focus in chat page
   const showMaxIcon = !isMobileScreen && !clientConfig?.isApp;
+
+  // check if should send message
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // if ArrowUp and no userInput, fill with last input
+    if (
+      e.key === "ArrowUp" &&
+      userInput.length <= 0 &&
+      !(e.metaKey || e.altKey || e.ctrlKey)
+    ) {
+      setUserInput(localStorage.getItem(LAST_INPUT_KEY) ?? "");
+      e.preventDefault();
+      return;
+    }
+    if (!hasTyping && shouldSubmit(e) && promptHints.length === 0) {
+      doSubmit(userInput);
+      e.preventDefault();
+    }
+  };
 
   useCommand({
     fill: setUserInput,
@@ -1128,6 +1159,7 @@ export function Chat() {
             className={styles["chat-input-send"]}
             type="primary"
             onClick={() => doSubmit(userInput)}
+            disabled={hasTyping}
           />
         </div>
       </div>

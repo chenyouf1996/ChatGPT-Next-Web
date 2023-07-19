@@ -1,0 +1,53 @@
+.rank {
+  color: var(--black);
+  background-color: var(--white);
+  padding: 0 32px 32px 32px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: auto;
+  .row-end {
+    display: flex;
+    align-items: flex-end;
+  }
+  .rank-title {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    position: sticky;
+    top: 0;
+    background-color: var(--white);
+    padding-top: 32px;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    button {
+      margin-left: 5px;
+    }
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  td,
+  th {
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  th {
+    font-size: 18px;
+  }
+
+  tr {
+    border-bottom: 1px solid #e2e2e2;
+  }
+
+  .index {
+    font-weight: bold;
+    color: var(--black);
+  }
+}

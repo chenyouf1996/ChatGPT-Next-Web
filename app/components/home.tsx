@@ -55,6 +55,22 @@ const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
   loading: () => <Loading noLogo />,
 });
 
+const UserPage = dynamic(async () => await import("./user"), {
+  loading: () => <Loading noLogo />,
+});
+
+const RankPage = dynamic(async () => await import("./rank"), {
+  loading: () => <Loading noLogo />,
+});
+
+const UpdateRankPage = dynamic(async () => await import("./updateRank"), {
+  loading: () => <Loading noLogo />,
+});
+
+const ManageKey = dynamic(async () => await import("./manageKey"), {
+  loading: () => <Loading noLogo />,
+});
+
 export function useSwitchTheme() {
   const config = useAppConfig();
 
@@ -146,6 +162,10 @@ function Screen() {
               <Route path={Path.Masks} element={<MaskPage />} />
               <Route path={Path.Chat} element={<Chat />} />
               <Route path={Path.Settings} element={<Settings />} />
+              <Route path={Path.User} element={<UserPage />} />
+              <Route path={Path.Rank} element={<RankPage />} />
+              <Route path={Path.UpdateRank} element={<UpdateRankPage />} />
+              <Route path={Path.ManageKey} element={<ManageKey />} />
             </Routes>
           </div>
         </>

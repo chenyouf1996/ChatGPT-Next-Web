@@ -1,8 +1,6 @@
 import { SubmitKey } from "../store/config";
-import { LocaleType } from "./index";
 
-// if you are adding a new translation, please use PartialLocaleType instead of LocaleType
-const en: LocaleType = {
+const en = {
   WIP: "Coming Soon...",
   Error: {
     Unauthorized:
@@ -174,6 +172,17 @@ const en: LocaleType = {
         Title: "Hide Builtin Masks",
         SubTitle: "Hide builtin masks in mask list",
       },
+    },
+    User: {
+      Name: "登录/注册",
+      LoginTitle: '登录账号',
+      RegisterTitle: '注册账号',
+      LoginSubTitle: '有任何使用上的问题请加Q群209119779反馈',
+      LoginBtn: '登录',
+      RegisterBtn: '注册',
+      UserName: '用户名',
+      Password: '密码',
+      email: '邮箱'
     },
     Prompt: {
       Disable: {

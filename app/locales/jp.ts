@@ -10,6 +10,17 @@ const jp: PartialLocaleType = {
   ChatItem: {
     ChatItemCount: (count: number) => `${count} 通のチャット`,
   },
+  User: {
+    Name: "登录/注册",
+    LoginTitle: '登录账号',
+    RegisterTitle: '注册账号',
+    LoginSubTitle: '有任何使用上的问题请加Q群209119779反馈',
+    LoginBtn: '登录',
+    RegisterBtn: '注册',
+    UserName: '用户名',
+    Password: '密码',
+    email: '邮箱'
+  },
   Chat: {
     SubTitle: (count: number) => `ChatGPTとの ${count} 通のチャット`,
     Actions: {
@@ -33,7 +44,7 @@ const jp: PartialLocaleType = {
     Send: "送信",
     Config: {
       Reset: "リセット",
-      SaveAs: "另存为面具",
+      SaveAs: "另存为预设角色",
     },
   },
   Export: {

@@ -16,6 +16,10 @@ export enum Path {
   NewChat = "/new-chat",
   Masks = "/masks",
   Auth = "/auth",
+  User = "/user",
+  Rank = "/rank",
+  UpdateRank = "/updateRank",
+  ManageKey = "/manageKey",
 }
 
 export enum SlotID {

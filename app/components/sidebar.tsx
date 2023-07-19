@@ -1,10 +1,12 @@
 import { useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import dynamic from "next/dynamic";
 
 import styles from "./home.module.scss";
 
 import { IconButton } from "./button";
 import SettingsIcon from "../icons/settings.svg";
-import GithubIcon from "../icons/github.svg";
+// import GithubIcon from "../icons/github.svg";
 import ChatGptIcon from "../icons/chatgpt.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
@@ -15,19 +17,19 @@ import DragIcon from "../icons/drag.svg";
 import Locale from "../locales";
 
 import { useAppConfig, useChatStore } from "../store";
+import useAuth from "../hooks/useAuth";
 
 import {
   MAX_SIDEBAR_WIDTH,
   MIN_SIDEBAR_WIDTH,
   NARROW_SIDEBAR_WIDTH,
   Path,
-  REPO_URL,
+  // REPO_URL,
 } from "../constant";
 
-import { Link, useNavigate } from "react-router-dom";
 import { useMobileScreen } from "../utils";
-import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
+import useUser from "../hooks/useUser";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -107,8 +109,17 @@ export function SideBar(props: { className?: string }) {
   const { onDragMouseDown, shouldNarrow } = useDragSideBar();
   const navigate = useNavigate();
   const config = useAppConfig();
+  const { logout } = useAuth();
+  const { user } = useUser();
 
   useHotKey();
+
+  const goUser = () => navigate(Path.User);
+
+  const handleLogout = async () => {
+    await logout();
+    goUser();
+  };
 
   return (
     <div
@@ -118,14 +129,58 @@ export function SideBar(props: { className?: string }) {
     >
       <div className={styles["sidebar-header"]} data-tauri-drag-region>
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
-          ChatGPT Next
+          ChatGPT
         </div>
-        <div className={styles["sidebar-sub-title"]}>
-          Build your own AI assistant.
-        </div>
+        <div className={styles["sidebar-sub-title"]}>定制你的私人ai助手</div>
         <div className={styles["sidebar-logo"] + " no-dark"}>
           <ChatGptIcon />
         </div>
+      </div>
+
+      <div className={styles["sidebar-header-bar"]}>
+        {user ? (
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            {!shouldNarrow && (
+              <span>
+                {user.userName} 积分:{user.integral}
+              </span>
+            )}
+            <IconButton text="退出" onClick={handleLogout} />
+          </div>
+        ) : (
+          <IconButton
+            text={Locale.User.Name}
+            className={styles["sidebar-bar-button"]}
+            onClick={() => navigate(Path.User, { state: { fromHome: true } })}
+            shadow
+          />
+        )}
+      </div>
+
+      <div className={styles["sidebar-header-bar"]}>
+        <IconButton
+          text={"排行榜"}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => navigate(Path.Rank, { state: { fromHome: true } })}
+          shadow
+        />
+        <IconButton
+          text={"交流群"}
+          className={styles["sidebar-bar-button"]}
+          onClick={() =>
+            window.open(
+              "https://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=KmqVE6OyQnkrqe0gv_MsYNalHs6LotJw&authKey=ktIZLcO4zePw9t15MZrsaw1wpvAOdeZMtIeThE91jH%2BGfqaS5RDnXursbhbJxobZ&noverify=0&group_code=209119779",
+            )
+          }
+          shadow
+        />
       </div>
 
       <div className={styles["sidebar-header-bar"]}>
@@ -173,11 +228,11 @@ export function SideBar(props: { className?: string }) {
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
           </div>
-          <div className={styles["sidebar-action"]}>
+          {/* <div className={styles["sidebar-action"]}>
             <a href={REPO_URL} target="_blank">
               <IconButton icon={<GithubIcon />} shadow />
             </a>
-          </div>
+          </div> */}
         </div>
         <div>
           <IconButton

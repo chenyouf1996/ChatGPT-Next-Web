@@ -13,6 +13,7 @@ import {
   fetchEventSource,
 } from "@fortaine/fetch-event-source";
 import { prettyObject } from "@/app/utils/format";
+import { emitEvent } from "../../event/eventManager";
 
 export interface OpenAIListModelResponse {
   object: string;
@@ -102,6 +103,28 @@ export class ChatGPTApi implements LLMApi {
 
         controller.signal.onabort = finish;
 
+        const user = await options.onBefore?.();
+
+        if (user && user.currentIntegral <= 0) {
+          options.onError?.({
+            name: "积分不足",
+            message:
+              "积分不足，本平台永久免费，为避免有不良用户滥用影响其他用户基本使用、采取账号积分限制使用，如需继续使用请加Q群209119779获取每日50积分体验账号",
+          });
+          return;
+        }
+        // const cyfGlobal = globalThis as any
+        // if(cyfGlobal.test) {
+        //   const res = await fetch(`/api/key/get`, {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   });
+        //   const keyData = await res.json();
+        //   chatPayload.headers.Authorization = `Bearer ${keyData?.data?.trim()}`;
+        // }
+
         fetchEventSource(chatPath, {
           ...chatPayload,
           async onopen(res) {
@@ -124,6 +147,8 @@ export class ChatGPTApi implements LLMApi {
                 ?.startsWith(EventStreamContentType) ||
               res.status !== 200
             ) {
+              emitEvent("chat-fail");
+
               const responseTexts = [responseText];
               let extraInfo = await res.clone().text();
               try {
@@ -164,6 +189,8 @@ export class ChatGPTApi implements LLMApi {
             finish();
           },
           onerror(e) {
+            emitEvent("chat-fail");
+
             options.onError?.(e);
             throw e;
           },

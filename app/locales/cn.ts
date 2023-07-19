@@ -3,8 +3,7 @@ import { SubmitKey } from "../store/config";
 const cn = {
   WIP: "该功能仍在开发中……",
   Error: {
-    Unauthorized:
-      "访问密码不正确或为空，请前往[登录](/#/auth)页输入正确的访问密码，或者在[设置](/#/settings)页填入你自己的 OpenAI API Key。",
+    Unauthorized: "运行出错，可加q群209119779反馈问题",
   },
   Auth: {
     Title: "需要密码",
@@ -33,7 +32,7 @@ const cn = {
     },
     Commands: {
       new: "新建聊天",
-      newm: "从面具新建聊天",
+      newm: "从预设角色新建聊天",
       next: "下一个聊天",
       prev: "上一个聊天",
       clear: "清除上下文",
@@ -48,7 +47,7 @@ const cn = {
         dark: "深色模式",
       },
       Prompt: "快捷指令",
-      Masks: "所有面具",
+      Masks: "所有预设角色",
       Clear: "清除聊天",
       Settings: "对话设置",
     },
@@ -64,7 +63,7 @@ const cn = {
     Send: "发送",
     Config: {
       Reset: "清除记忆",
-      SaveAs: "存为面具",
+      SaveAs: "存为预设角色",
     },
     IsContext: "预设提示词",
   },
@@ -80,8 +79,8 @@ const cn = {
       SubTitle: "可以导出 Markdown 文本或者 PNG 图片",
     },
     IncludeContext: {
-      Title: "包含面具上下文",
-      SubTitle: "是否在消息中展示面具上下文",
+      Title: "包含预设角色上下文",
+      SubTitle: "是否在消息中展示预设角色上下文",
     },
     Steps: {
       Select: "选取",
@@ -208,7 +207,7 @@ const cn = {
     Usage: {
       Title: "余额查询",
       SubTitle(used: any, total: any) {
-        return `本月已使用 $${used}，订阅总额 $${total}`;
+        return `本月已使用 ${used}，订阅总额 ${total}`;
       },
       IsChecking: "正在检查…",
       Check: "重新检查",
@@ -272,15 +271,26 @@ const cn = {
     Clear: "上下文已清除",
     Revert: "恢复上下文",
   },
+  User: {
+    Name: "登录/注册",
+    LoginTitle: "登录账号",
+    RegisterTitle: "注册账号",
+    LoginSubTitle: "有任何使用上的问题请加Q群209119779反馈",
+    LoginBtn: "登录",
+    RegisterBtn: "注册",
+    UserName: "用户名",
+    Password: "密码",
+    email: "邮箱",
+  },
   Plugin: {
     Name: "插件",
   },
   Mask: {
-    Name: "面具",
+    Name: "预设角色",
     Page: {
-      Title: "预设角色面具",
+      Title: "预设角色",
       SubTitle: (count: number) => `${count} 个预设角色定义`,
-      Search: "搜索角色面具",
+      Search: "搜索角色",
       Create: "新建",
     },
     Item: {
@@ -293,7 +303,7 @@ const cn = {
     },
     EditModal: {
       Title: (readonly: boolean) =>
-        `编辑预设面具 ${readonly ? "（只读）" : ""}`,
+        `编辑预设角色 ${readonly ? "（只读）" : ""}`,
       Download: "下载预设",
       Clone: "克隆预设",
     },
@@ -321,8 +331,8 @@ const cn = {
     Skip: "直接开始",
     NotShow: "不再展示",
     ConfirmNoShow: "确认禁用？禁用后可以随时在设置中重新启用。",
-    Title: "挑选一个面具",
-    SubTitle: "现在开始，与面具背后的灵魂思维碰撞",
+    Title: "挑选一个预设角色",
+    SubTitle: "现在开始，与预设角色背后的灵魂思维碰撞",
     More: "查看全部",
   },
 

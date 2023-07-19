@@ -10,6 +10,17 @@ const it: PartialLocaleType = {
   ChatItem: {
     ChatItemCount: (count: number) => `${count} messaggi`,
   },
+  User: {
+    Name: "登录/注册",
+    LoginTitle: '登录账号',
+    RegisterTitle: '注册账号',
+    LoginSubTitle: '有任何使用上的问题请加Q群209119779反馈',
+    LoginBtn: '登录',
+    RegisterBtn: '注册',
+    UserName: '用户名',
+    Password: '密码',
+    email: '邮箱'
+  },
   Chat: {
     SubTitle: (count: number) => `${count} messaggi con ChatGPT`,
     Actions: {
