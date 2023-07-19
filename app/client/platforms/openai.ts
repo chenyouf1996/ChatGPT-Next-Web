@@ -106,22 +106,22 @@ export class ChatGPTApi implements LLMApi {
           options.onError?.({
             name: "积分不足",
             message:
-              "积分不足，本平台永久免费，暂定每日使用总额为输入+输出200W汉字，为避免有不良用户滥用影响其他用户基本使用、采取账号积分制，请加Q群209119779联系获取新的体验账号",
+              "积分不足，本平台永久免费，为避免有不良用户滥用影响其他用户基本使用、采取账号积分限制使用，如需继续使用请加Q群209119779获取每日50积分体验账号",
           });
           return;
         }
-        const cyfGlobal = globalThis as any
-        if(cyfGlobal.test) {
-          const res = await fetch(`/api/key/get`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const keyData = await res.json();
-          chatPayload.headers.Authorization = `Bearer ${keyData?.data?.trim()}`;
-        }
-        
+        // const cyfGlobal = globalThis as any
+        // if(cyfGlobal.test) {
+        //   const res = await fetch(`/api/key/get`, {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //   });
+        //   const keyData = await res.json();
+        //   chatPayload.headers.Authorization = `Bearer ${keyData?.data?.trim()}`;
+        // }
+
         fetchEventSource(chatPath, {
           ...chatPayload,
           async onopen(res) {
