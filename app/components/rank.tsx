@@ -26,21 +26,21 @@ const Rank = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (rankType === "today") {
-      setAllUser(
-        [...allUser].sort(
-          (prev: any, cur: any) => cur.todayRank - prev.todayRank,
-        ),
-      );
-    } else {
-      setAllUser(
-        [...allUser].sort(
-          (prev: any, cur: any) => cur.totalRank - prev.totalRank,
-        ),
-      );
-    }
-  }, [rankType]);
+  // useEffect(() => {
+  //   if (rankType === "today") {
+  //     setAllUser(
+  //       [...allUser].sort(
+  //         (prev: any, cur: any) => cur.todayRank - prev.todayRank,
+  //       ),
+  //     );
+  //   } else {
+  //     setAllUser(
+  //       [...allUser].sort(
+  //         (prev: any, cur: any) => cur.totalRank - prev.totalRank,
+  //       ),
+  //     );
+  //   }
+  // }, [rankType]);
 
   const changeRank = (type: string) => {
     setRankType(type === "today" ? "week" : "today");
