@@ -29,6 +29,7 @@ import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
 import { api } from "../client/api";
 import { useAccessStore } from "../store";
+import { Analytics } from '@vercel/analytics/react';
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -168,6 +169,8 @@ function Screen() {
               <Route path={Path.ManageKey} element={<ManageKey />} />
             </Routes>
           </div>
+
+          <Analytics />
         </>
       )}
     </div>
