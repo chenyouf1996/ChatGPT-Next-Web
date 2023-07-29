@@ -711,7 +711,7 @@ export function Chat() {
     setIsLoading(true);
     chatStore
       .onUserInput(userInput, minusIntegral)
-      .then(() => setIsLoading(false));
+      .finally(() => setIsLoading(false));
     localStorage.setItem(LAST_INPUT_KEY, userInput);
     setUserInput("");
     setPromptHints([]);
@@ -846,7 +846,9 @@ export function Chat() {
 
     // resend the message
     setIsLoading(true);
-    chatStore.onUserInput(userMessage.content, minusIntegral).then(() => setIsLoading(false));
+    chatStore
+      .onUserInput(userMessage.content, minusIntegral)
+      .finally(() => setIsLoading(false));
     inputRef.current?.focus();
   };
 
